@@ -1,3 +1,5 @@
+#浏览器模块
+from app.agent.toolcall import ToolCallAgent
 
 
 class BrowserAgent(ToolCallAgent):
