@@ -1,6 +1,6 @@
 [llm]
-model = "claude-3-7-sonnet-20250219"        # The LLM model to use
-base_url = "https://api.anthropic.com/v1/"  # API endpoint URL
-api_key = "YOUR_API_KEY"                    # Your API key
+model = "deepseek-chat"        # The LLM model to use
+base_url = "https://api.deepseek.com/v1"  # API endpoint URL
+api_key = "sk-82957ebf79174747b085ba495b78eeed"                    # Your API key
 max_tokens = 8192                           # Maximum number of tokens in the response
 temperature = 0.0                           # Controls randomness
