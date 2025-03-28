@@ -10,7 +10,6 @@ async def main():
         if not prompt.strip():
             logger.warning("请求不能为空")
             return
-
         logger.warning("正在处理请求...")
         await agent.run(prompt)
         logger.info("请求处理完成")

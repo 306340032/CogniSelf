@@ -53,8 +53,7 @@ class LLM:
                 self.tokenizer = tiktoken.encoding_for_model(self.model)
             except KeyError:
                 self.tokenizer = tiktoken.get_encoding("cl100k_base")
-
             self.client = AsyncOpenAI(api_key=self.api_key, base_url=self.base_url)
             self.tokens_counter = TokenCounter(self.tokenizer)
-        print("LLM实例__init__方法被调用")
+        print("LLM实例__init__方法被调用结束")
     pass
