@@ -17,7 +17,7 @@ class WebSearch(BaseTool):# 继承BaseTool类，定义网络搜索类WebSearch�
         "baidu": BaiduSearchEngine()
     }# 定义搜索引擎列表
 
-    async def execute(self, query: str, num_results: int = 10) -> list[dict]:#execute方法，执行网络搜索并返回相关链接的列表。
+    async def execute(self, query: str, num_results: int = 10) -> list[str]:#execute方法，执行网络搜索并返回相关链接的列表。
         """
         执行Web搜索并返回URL列表。
         根据配置按顺序尝试引擎，如果引擎出现故障并出现错误，则回退。
@@ -28,7 +28,7 @@ class WebSearch(BaseTool):# 继承BaseTool类，定义网络搜索类WebSearch�
         返回：
             一个URL列表，包含搜索结果。
         """
-        # Get retry settings from config意思是从配置文件中获取重试设置。
+        # 从配置文件中获取重试设置。
         retry_delay = 60 # 重试延迟，单位为秒
         max_retries = 3 # 最大重试次数
 
