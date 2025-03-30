@@ -16,7 +16,6 @@ class TokenCounter:
     def __init__(self, tokenizer):
         print("TokenCounter实例被创建")
         self.tokenizer = tokenizer
-        print(f"TokenCounter实例被创建:{tokenizer}")
 
     def count_text(self, text: str) -> int:
         #计算文本的token数量
@@ -48,12 +47,10 @@ class LLM:
             self.total_input_tokens = 0
             self.total_output_tokens = 0
             self.max_input_tokens = (llm_config.max_input_tokens if hasattr(llm_config, "max_input_tokens") else None)
-
             try:
                 self.tokenizer = tiktoken.encoding_for_model(self.model)
             except KeyError:
                 self.tokenizer = tiktoken.get_encoding("cl100k_base")
             self.client = AsyncOpenAI(api_key=self.api_key, base_url=self.base_url)
             self.tokens_counter = TokenCounter(self.tokenizer)
-        print("LLM实例__init__方法被调用结束")
     pass

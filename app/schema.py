@@ -1,11 +1,12 @@
+#架构文件
 from enum import Enum
 from typing import Any, List, Literal, Optional, Union
-
+from app.logger import logger
 from pydantic import BaseModel, Field
 
 
 class Role(str, Enum):
-    """Message role options"""
+    """Message role options""" #消息角色选项
 
     SYSTEM = "system"
     USER = "user"
@@ -14,7 +15,7 @@ class Role(str, Enum):
 
 
 ROLE_VALUES = tuple(role.value for role in Role)
-ROLE_TYPE = Literal[ROLE_VALUES]  # type: ignore
+ROLE_TYPE = Literal[ROLE_VALUES]  #角色类型
 
 
 class ToolChoice(str, Enum):
@@ -30,12 +31,12 @@ TOOL_CHOICE_TYPE = Literal[TOOL_CHOICE_VALUES]  # type: ignore
 
 
 class AgentState(str, Enum):
-    """Agent execution states"""
+    """Agent execution states"""  #Agent执行状态
 
-    IDLE = "IDLE"
-    RUNNING = "RUNNING"
-    FINISHED = "FINISHED"
-    ERROR = "ERROR"
+    IDLE = "IDLE"   #空闲状态
+    RUNNING = "RUNNING"   #运行状态
+    FINISHED = "FINISHED"  #完成状态
+    ERROR = "ERROR"  #错误状态
 
 
 class Function(BaseModel):
@@ -52,7 +53,7 @@ class ToolCall(BaseModel):
 
 
 class Message(BaseModel):
-    """Represents a chat message in the conversation"""
+    """Represents a chat message in the conversation"""#表示对话中的聊天消息
 
     role: ROLE_TYPE = Field(...)  # type: ignore
     content: Optional[str] = Field(default=None)
@@ -97,9 +98,7 @@ class Message(BaseModel):
         return message
 
     @classmethod
-    def user_message(
-        cls, content: str, base64_image: Optional[str] = None
-    ) -> "Message":
+    def user_message(cls, content: str, base64_image: Optional[str] = None) -> "Message":
         """Create a user message"""
         return cls(role=Role.USER, content=content, base64_image=base64_image)
 
@@ -109,24 +108,14 @@ class Message(BaseModel):
         return cls(role=Role.SYSTEM, content=content)
 
     @classmethod
-    def assistant_message(
-        cls, content: Optional[str] = None, base64_image: Optional[str] = None
-    ) -> "Message":
+    def assistant_message(cls, content: Optional[str] = None, base64_image: Optional[str] = None) -> "Message":
         """Create an assistant message"""
         return cls(role=Role.ASSISTANT, content=content, base64_image=base64_image)
 
     @classmethod
-    def tool_message(
-        cls, content: str, name, tool_call_id: str, base64_image: Optional[str] = None
-    ) -> "Message":
+    def tool_message(cls, content: str, name, tool_call_id: str, base64_image: Optional[str] = None) -> "Message":
         """Create a tool message"""
-        return cls(
-            role=Role.TOOL,
-            content=content,
-            name=name,
-            tool_call_id=tool_call_id,
-            base64_image=base64_image,
-        )
+        return cls(role=Role.TOOL,content=content,name=name,tool_call_id=tool_call_id,base64_image=base64_image)
 
     @classmethod
     def from_tool_calls(
@@ -156,12 +145,13 @@ class Message(BaseModel):
         )
 
 
-class Memory(BaseModel):
-    messages: List[Message] = Field(default_factory=list)
+class Memory(BaseModel):  #表示对话的记忆
+    messages: List[Message] = Field(default_factory=list)  #消息列表，List类型
     max_messages: int = Field(default=100)
 
     def add_message(self, message: Message) -> None:
         """Add a message to memory"""
+        #logger.info(f"add message: {message}")
         self.messages.append(message)
         # Optional: Implement message limit
         if len(self.messages) > self.max_messages:
