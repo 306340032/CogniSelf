@@ -1,4 +1,5 @@
 import asyncio
+from time import sleep
 
 from app.agent.cogniself import CogniSelf
 from app.logger import logger
@@ -6,6 +7,7 @@ from app.logger import logger
 async def main():
     agent = CogniSelf()
     try:
+        sleep(1)
         prompt = input("请输入要处理的请求：")
         if not prompt.strip():
             logger.warning("请求不能为空")

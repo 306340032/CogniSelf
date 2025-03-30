@@ -187,6 +187,9 @@ class Config:                     #Config代表配置类
     def llm(self) -> Dict[str,LLMSettings]:
         return self._config.llm  #返回配置信息中的llm部分。
 
+    @property
+    def workspace_root(self) -> Path:
+        return WORKSPACE_ROOT
 config = Config()  #实例化Config类，config为Config类的实例。
 
 

@@ -1,7 +1,15 @@
 import tiktoken
-from typing import Dict, Optional
-from openai import OpenAI, AsyncOpenAI
+from typing import Dict, Optional, List, Union
+from openai import OpenAI, AsyncOpenAI, OpenAIError
+from openai.types.chat.chat_completion_message import ChatCompletionMessage
+from tenacity import retry, wait_random_exponential, stop_after_attempt, retry_if_exception_type
+
+from app.logger import logger
 from app.config import config,LLMSettings
+from app.schema import Message, ToolChoice, TOOL_CHOICE_TYPE
+
+REASONING_MODELS=["R1"]#推理模型
+MULTIMODAL_MODELS=["Align-DS-V"]#多模态模型
 class TokenCounter:
     print("TokenCounter类被调用")
     BASE_MESSAGE_TOKENS = 4
@@ -21,7 +29,6 @@ class TokenCounter:
         #计算文本的token数量
         return 0 if not text else len(self.tokenizer.encode(text))
 class LLM:
-    print("LLM类被调用")
     _instances: Dict[str, "LLM"] = {}#私有实例
     def __new__(cls, config_name: str = "default", llm_config: Optional[LLMSettings]=None):#用于创建实例的特殊方法，在__init__之前调用
         print("LLM实例__new__方法被调用")
@@ -53,4 +60,26 @@ class LLM:
                 self.tokenizer = tiktoken.get_encoding("cl100k_base")
             self.client = AsyncOpenAI(api_key=self.api_key, base_url=self.base_url)
             self.tokens_counter = TokenCounter(self.tokenizer)
-    pass
+
+    @retry(
+        wait=wait_random_exponential(min=1, max=60),
+        stop=stop_after_attempt(6),
+        retry=retry_if_exception_type(
+            (OpenAIError, Exception, ValueError)
+        ),  # Don't retry TokenLimitExceeded
+    )
+    async def ask_tool(
+        self,
+        messages: List[Union[dict, Message]],
+        system_msgs: Optional[List[Union[dict, Message]]] = None,
+        timeout: int = 300,
+        tools: Optional[List[dict]] = None,
+        tool_choice: TOOL_CHOICE_TYPE = ToolChoice.AUTO,  # type: ignore
+        temperature: Optional[float] = None,
+        **kwargs,
+    ) -> ChatCompletionMessage | None:
+        logger.info(f"智能体(工具调用)-1111111111")
+
+
+
+

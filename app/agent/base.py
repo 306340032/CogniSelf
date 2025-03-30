@@ -9,7 +9,6 @@ from app.logger import logger
 
 class BaseAgent(BaseModel, ABC):
     """智能体的抽象基类，用于管理智能体的状态和执行。为状态转换、内存管理提供基础功能，以及基于步骤的执行循环。子类必须实现step方法。"""
-    print("BaseAgent智能体基础正在运行")
     #核心属性
     name: str = Field(..., description="Agent的唯一名称")
     description: Optional[str] = Field(None, description="Agent的描述信息")
@@ -97,3 +96,12 @@ class BaseAgent(BaseModel, ABC):
         """检查智能体是否卡住。"""
         if len(self.memory.messages) < 2:
             return False
+
+    @property
+    def messages(self) -> List[Message]:
+        return self.memory.messages
+
+    @messages.setter
+    def messages(self, value: List[Message]):
+        """Set the list of messages in the agent's memory."""
+        self.memory.messages = value

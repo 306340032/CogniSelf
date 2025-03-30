@@ -13,22 +13,17 @@ class Role(str, Enum):
     ASSISTANT = "assistant"
     TOOL = "tool"
 
-
 ROLE_VALUES = tuple(role.value for role in Role)
 ROLE_TYPE = Literal[ROLE_VALUES]  #角色类型
 
-
 class ToolChoice(str, Enum):
-    """Tool choice options"""
-
+    """工具选择选项"""
     NONE = "none"
     AUTO = "auto"
     REQUIRED = "required"
 
-
 TOOL_CHOICE_VALUES = tuple(choice.value for choice in ToolChoice)
 TOOL_CHOICE_TYPE = Literal[TOOL_CHOICE_VALUES]  # type: ignore
-
 
 class AgentState(str, Enum):
     """Agent execution states"""  #Agent执行状态
@@ -38,19 +33,15 @@ class AgentState(str, Enum):
     FINISHED = "FINISHED"  #完成状态
     ERROR = "ERROR"  #错误状态
 
-
 class Function(BaseModel):
     name: str
     arguments: str
 
-
 class ToolCall(BaseModel):
-    """Represents a tool/function call in a message"""
-
+    """消息中的工具/函数调用"""
     id: str
     type: str = "function"
     function: Function
-
 
 class Message(BaseModel):
     """Represents a chat message in the conversation"""#表示对话中的聊天消息
@@ -143,7 +134,6 @@ class Message(BaseModel):
             base64_image=base64_image,
             **kwargs,
         )
-
 
 class Memory(BaseModel):  #表示对话的记忆
     messages: List[Message] = Field(default_factory=list)  #消息列表，List类型
