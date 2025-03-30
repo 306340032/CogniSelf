@@ -22,7 +22,6 @@ class ToolCollection:#工具集类
         return iter(self.tools)
 
     def to_params(self) -> List[Dict[str, Any]]:
-        logger.info(f"智能体(工具调用)-工具集功能-to_params")
         return [tool.to_param() for tool in self.tools]
 
     async def execute(self, *, name:str, tool_input: Dict[str, Any]=None) -> ToolResult: # 执行

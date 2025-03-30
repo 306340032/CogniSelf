@@ -11,7 +11,6 @@ from app.schema import Message, ToolChoice, TOOL_CHOICE_TYPE
 REASONING_MODELS=["R1"]#推理模型
 MULTIMODAL_MODELS=["Align-DS-V"]#多模态模型
 class TokenCounter:
-    print("TokenCounter类被调用")
     BASE_MESSAGE_TOKENS = 4
     FORMAT_TOKENS = 2
     LOW_DETAIL_IMAGE_TOKENS = 85
@@ -22,7 +21,6 @@ class TokenCounter:
     TILE_SIZE = 512
 
     def __init__(self, tokenizer):
-        print("TokenCounter实例被创建")
         self.tokenizer = tokenizer
 
     def count_text(self, text: str) -> int:
@@ -78,7 +76,7 @@ class LLM:
         temperature: Optional[float] = None,
         **kwargs,
     ) -> ChatCompletionMessage | None:
-        logger.info(f"智能体(工具调用)-1111111111")
+        logger.info(f"智能体(工具调用)-执行动作：LLM大模型调用工具")
 
 
 
